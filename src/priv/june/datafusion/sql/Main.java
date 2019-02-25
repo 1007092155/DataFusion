@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
     	MysqlConnecter sqlCon=new MysqlConnecter();
     	int lineNum=0;
-    	for(int i=1;i<2;i++)
+    	for(int i=2;i<31;i++)
     	{
     		String day;
     		if(i<10){ 
@@ -14,28 +14,28 @@ public class Main {
     		else{
     			day=String.valueOf(i);
     		}
-//    		if(sqlCon.loadData("gps_201611"+day)==1){
+    		if(sqlCon.loadData("gps_201611"+day)==1){
     			
-				lineNum=sqlCon.insertAreadata(104.075849,30.685079,104.07368,30.685836,day,"area_data_right");//方向：l1tol2
+				lineNum=sqlCon.insertAreadata(104.07584,30.68507,104.07368,30.68583,day,"area_data_right");//方向：l1tol2
 				System.out.println("Inserted "+lineNum+" to area_data_right.");
-		    	sqlCon.initArea_ave(day,"area_ave_right","area_ave_right");
+		    	sqlCon.initArea_ave(day,"area_ave_right","area_data_right");
 
-				lineNum=sqlCon.insertAreadata(104.073279,30.686010,104.073295,30.688026,day,"area_data_up");//方向：l1tol2
+				lineNum=sqlCon.insertAreadata(104.07327,30.68601,104.07329,30.68802,day,"area_data_up");//方向：l1tol2
 				System.out.println("Inserted "+lineNum+" to area_data_up.");
-		    	sqlCon.initArea_ave(day,"area_ave_up","area_ave_up");
+		    	sqlCon.initArea_ave(day,"area_ave_up","area_data_up");
 		    	
-				lineNum=sqlCon.insertAreadata(104.072885,30.683739,104.073255,30.685765,day,"area_data_down");//方向：l1tol2
+				lineNum=sqlCon.insertAreadata(104.07288,30.68373,104.07325,30.68576,day,"area_data_down");//方向：l1tol2
 				System.out.println("Inserted "+lineNum+" to area_data_down.");
-		    	sqlCon.initArea_ave(day,"area_ave_down","area_ave_down");
+		    	sqlCon.initArea_ave(day,"area_ave_down","area_data_down");
 
-				lineNum=sqlCon.insertAreadata(104.070582,30.685845,104.072972,30.685812,day,"area_data_left");//方向：l1tol2
+				lineNum=sqlCon.insertAreadata(104.07058,30.68584,104.07297,30.68581,day,"area_data_left");//方向：l1tol2
 				System.out.println("Inserted "+lineNum+" to area_data_left.");
-		    	sqlCon.initArea_ave(day,"area_ave_left","area_ave_left");
+		    	sqlCon.initArea_ave(day,"area_ave_left","area_data_left");
 		    	
 //		    	sqlCon.insertRrr(day,"area_ave_right");
 		    	
 		    	sqlCon.truncateTable("gps_201611"+day);
-//    		}
+    		}
     	}
 //    	sqlCon.replaceMissingValue("area_ave_up");
 //    	sqlCon.transToTrainData("area_ave_up", "train_data_up");

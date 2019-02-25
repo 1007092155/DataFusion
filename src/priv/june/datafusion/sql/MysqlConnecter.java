@@ -92,12 +92,12 @@ public class MysqlConnecter {
 			System.out.print("serch sql:" + sql);
 			// 3.ResultSet类，用来存放获取的结果集！！
 			ResultSet rs = queryStm.executeQuery(sql);
-			System.out.println("-----------------");
-			System.out.println("执行结果如下所示:");
-			System.out.println("-----------------");
-			System.out.println("id" + "\t" + "week" + "\t" + "time" + "\t"
-					+ "timeSlot" + "\t" + "longitude" + "\t" + "latitude");
-			System.out.println("-----------------");
+//			System.out.println("-----------------");
+//			System.out.println("执行结果如下所示:");
+//			System.out.println("-----------------");
+//			System.out.println("id" + "\t" + "week" + "\t" + "time" + "\t"
+//					+ "timeSlot" + "\t" + "longitude" + "\t" + "latitude");
+//			System.out.println("-----------------");
 
 			String insertSql = null;
 			String temp = null;
@@ -144,14 +144,14 @@ public class MysqlConnecter {
 						distance = gpsTrans.getDistance(gpsData1.getLat(),
 								gpsData1.getLng(), gpsData2.getLat(),
 								gpsData2.getLng());
-						System.out.print("distance=" + distance + "\t");
+//						System.out.print("distance=" + distance + "\t");
 						timeInterval = tm.getTimeInterval(gpsData1.getDate(),
 								gpsData2.getDate(), 6);
-						System.out.print("timeInterval=" + timeInterval + "\t");
+//						System.out.print("timeInterval=" + timeInterval + "\t");
 
-						System.out.println(gpsData1.getDriverId()+" "+gpsData2.getDriverId());
+//						System.out.println(gpsData1.getDriverId()+" "+gpsData2.getDriverId());
 						speed = gpsTrans.getSpeed(distance, timeInterval);
-						System.out.println("speed=" + speed + "\t");
+//						System.out.println("speed=" + speed + "\t");
 						
 						//判断方向
 						if(gpsData1.getDate().before(gpsData2.getDate())&&
@@ -186,12 +186,12 @@ public class MysqlConnecter {
 						distance = gpsTrans.getDistance(gpsData1.getLat(),
 								gpsData1.getLng(), gpsData2.getLat(),
 								gpsData2.getLng());
-						System.out.print("distance=" + distance + "\t");
+//						System.out.print("distance=" + distance + "\t");
 						timeInterval = tm.getTimeInterval(gpsData1.getDate(),
 								gpsData2.getDate(), 6);
-						System.out.print("timeInterval=" + timeInterval + "\t");
+//						System.out.print("timeInterval=" + timeInterval + "\t");
 						speed = gpsTrans.getSpeed(distance, timeInterval);
-						System.out.println("speed=" + speed + "\t");
+//						System.out.println("speed=" + speed + "\t");
 						
 						//System.out.println(gpsData1.getDate()+" "+gpsData2.getDate());
 						//System.out.println("data1 distance:"+gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),30.706538,104.052880));
@@ -248,12 +248,12 @@ public class MysqlConnecter {
 				distance = gpsTrans
 						.getDistance(gpsData1.getLat(), gpsData1.getLng(),
 								gpsData2.getLat(), gpsData2.getLng());
-				System.out.print("distance=" + distance + "\t");
+//				System.out.print("distance=" + distance + "\t");
 				timeInterval = tm.getTimeInterval(gpsData1.getDate(),
 						gpsData2.getDate(), 6);
-				System.out.print("timeInterval=" + timeInterval + "\t");
+//				System.out.print("timeInterval=" + timeInterval + "\t");
 				speed = gpsTrans.getSpeed(distance, timeInterval);
-				System.out.println("speed=" + speed + "\t");
+//				System.out.println("speed=" + speed + "\t");
 				
 				if(gpsData1.getDate().before(gpsData2.getDate())&&
 						gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),latOrigin2,lngOrigin2)
