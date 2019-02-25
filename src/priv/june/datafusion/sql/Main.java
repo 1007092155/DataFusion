@@ -1,38 +1,46 @@
 package priv.june.datafusion.sql;
 
-import java.io.File;
-
-import priv.june.datafusion.kmeans.Kmeans;
-import priv.june.datafusion.kmeans.Kmeans_param;
-import weka.clusterers.SimpleKMeans;
-import weka.core.DistanceFunction;
-import weka.core.Instances;
-import weka.core.converters.ArffLoader;
-
 public class Main {
 
     public static void main(String[] args) {
     	MysqlConnecter sqlCon=new MysqlConnecter();
-//    	int lineNum=0;
-//    	for(int i=1;i<31;i++)
-//    	{
-//    		String day;
-//    		if(i<10){ 
-//    			day="0"+String.valueOf(i);
-//    		}
-//    		else{
-//    			day=String.valueOf(i);
-//    		}
+    	int lineNum=0;
+    	for(int i=1;i<2;i++)
+    	{
+    		String day;
+    		if(i<10){ 
+    			day="0"+String.valueOf(i);
+    		}
+    		else{
+    			day=String.valueOf(i);
+    		}
 //    		if(sqlCon.loadData("gps_201611"+day)==1){
-//    		lineNum=sqlCon.insertAreadata(103.970833,30.67518,103.97530,30.673915,day);//方向：l1tol2
-//    		System.out.println("Inserted "+lineNum+" to area_data2.");
-//        	sqlCon.initArea_ave(day);
-//        	sqlCon.insertRrr(day);
-//        	sqlCon.truncateTable("gps_201611"+day);
+    			
+				lineNum=sqlCon.insertAreadata(104.075849,30.685079,104.07368,30.685836,day,"area_data_right");//方向：l1tol2
+				System.out.println("Inserted "+lineNum+" to area_data_right.");
+		    	sqlCon.initArea_ave(day,"area_ave_right","area_ave_right");
+
+				lineNum=sqlCon.insertAreadata(104.073279,30.686010,104.073295,30.688026,day,"area_data_up");//方向：l1tol2
+				System.out.println("Inserted "+lineNum+" to area_data_up.");
+		    	sqlCon.initArea_ave(day,"area_ave_up","area_ave_up");
+		    	
+				lineNum=sqlCon.insertAreadata(104.072885,30.683739,104.073255,30.685765,day,"area_data_down");//方向：l1tol2
+				System.out.println("Inserted "+lineNum+" to area_data_down.");
+		    	sqlCon.initArea_ave(day,"area_ave_down","area_ave_down");
+
+				lineNum=sqlCon.insertAreadata(104.070582,30.685845,104.072972,30.685812,day,"area_data_left");//方向：l1tol2
+				System.out.println("Inserted "+lineNum+" to area_data_left.");
+		    	sqlCon.initArea_ave(day,"area_ave_left","area_ave_left");
+		    	
+//		    	sqlCon.insertRrr(day,"area_ave_right");
+		    	
+		    	sqlCon.truncateTable("gps_201611"+day);
 //    		}
-    	sqlCon.replaceMissingValue("area_ave1");
-    	sqlCon.transToTrainData("area_ave1", "train_data1");
+    	}
+//    	sqlCon.replaceMissingValue("area_ave_up");
+//    	sqlCon.transToTrainData("area_ave_up", "train_data_up");
     }
+}
     	
 /*    	Instances ins = null;  
         
@@ -62,4 +70,4 @@ public class Main {
     }catch (Exception e){
     	e.printStackTrace();
     }*/
-}
+//}

@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/Weka-3-7/weka.jar"/>
 	<classpathentry kind="lib" path="lib/arbiter-core-0.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/arbiter-core-0.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/arbiter-deeplearning4j-0.7.1.jar"/>

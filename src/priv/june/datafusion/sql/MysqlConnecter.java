@@ -33,8 +33,8 @@ public class MysqlConnecter {
 	private Connection con = null;
 	private boolean connected = false;
 	//插入table名
-	private String aveTable="area_ave2";
-	private String dataTable="area_data2";
+//	private String aveTable="area_ave_up";
+//	private String dataTable="area_data_up";
 
 	public MysqlConnecter() {
 		try {
@@ -62,11 +62,15 @@ public class MysqlConnecter {
 	 * @param day
 	 * @return
 	 */
-	public int insertAreadata(double lng1, double lat1, double lng2, double lat2,String day) {
+	public int insertAreadata(double lng1, double lat1, double lng2, double lat2,String day,String dataTable) {
 		GpsData gpsData1 = new GpsData();
 		GpsData gpsData2 = new GpsData();
 		TimeTrans tm = new TimeTrans();
 		GpsTransform gpsTrans = new GpsTransform();
+		double lngOrigin1 = lng1;
+		double lngOrigin2 = lng2;
+		double latOrigin1 = lat1;
+		double latOrigin2 = lat2;
 		int i = 0;
 		if(lng1>lng2) {double t;t=lng1;lng1=lng2;lng2=t;}
 		if(lat1>lat2) {double t;t=lat1;lat1=lat2;lat2=t;}
@@ -78,7 +82,7 @@ public class MysqlConnecter {
 			Statement queryStm = con.createStatement();
 			Statement insertStm = con.createStatement();
 			// 要执行的SQL语句
-			String sql = "select id,driverId,orderId,time,longitude,latitude from gps_2016110"+day+" where (longitude between "
+			String sql = "select id,driverId,orderId,time,longitude,latitude from gps_201611"+day+" where (longitude between "
 					+ lng1
 					+ " and "
 					+ lng2
@@ -151,8 +155,8 @@ public class MysqlConnecter {
 						
 						//判断方向
 						if(gpsData1.getDate().before(gpsData2.getDate())&&
-								gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),lat2,lng2)
-								>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),lat2,lng2)){
+								gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),latOrigin2,lngOrigin2)
+								>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),latOrigin2,lngOrigin2)){
 						
 							//System.out.println("insert "+gpsData2.getDriverId());
 							// 插入area_data表
@@ -194,8 +198,8 @@ public class MysqlConnecter {
 						//System.out.println("data2 distance:"+gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),30.706538,104.052880));
 						
 						if(gpsData1.getDate().before(gpsData2.getDate())&&
-								gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),lat2,lng2)
-								>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),lat2,lng2)){
+								gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),latOrigin2,lngOrigin2)
+								>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),latOrigin2,lngOrigin2)){
 						//System.out.println("insert "+gpsData2.getDriverId());
 							// 插入area_data表
 						insertSql = "insert into "+dataTable+" (datetime,week,timeSlot,drvId,speed) values ('"
@@ -252,8 +256,8 @@ public class MysqlConnecter {
 				System.out.println("speed=" + speed + "\t");
 				
 				if(gpsData1.getDate().before(gpsData2.getDate())&&
-						gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),lat2,lng2)
-						>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),lat2,lng2)){
+						gpsTrans.getDistance(gpsData1.getLat(),gpsData1.getLng(),latOrigin2,lngOrigin2)
+						>gpsTrans.getDistance(gpsData2.getLat(),gpsData2.getLng(),latOrigin2,lngOrigin2)){
 				
 					// 插入area_data表
 				insertSql = "insert into "+dataTable+" (datetime,week,timeSlot,drvId,speed) values ('"
@@ -269,6 +273,7 @@ public class MysqlConnecter {
 				}
 			}
 
+			con.commit();
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -281,7 +286,7 @@ public class MysqlConnecter {
 	 * @param day
 	 * @return
 	 */
-	public int initArea_ave(String day) {
+	public int initArea_ave(String day,String aveTable,String dataTable) {
 
 		if (!connected)
 			return 0;
@@ -347,6 +352,7 @@ public class MysqlConnecter {
 						+ week + ",'" + timeTrans.addMinute(d, j) + "',"
 						+ aveSpeed + "," + j + "," + level + ")";
 				initStm.executeUpdate(insertSql);
+				con.commit();
 				
 			}
 
@@ -362,7 +368,7 @@ public class MysqlConnecter {
 	 * 插入降雨量
 	 * @param day
 	 */
-	public void insertRrr(String day) {
+	public void insertRrr(String day,String aveTable) {
 		Statement rrrStm;
 		try {
 			rrrStm = con.createStatement();
@@ -377,6 +383,7 @@ public class MysqlConnecter {
 							+ " and date like '%2016-11-" + day + "%'";
 					Statement rrrinsertStm = con.createStatement();
 					rrrinsertStm.executeUpdate(insertSql);
+					con.commit();
 				}
 			}
 			rs.close();
@@ -398,18 +405,22 @@ public class MysqlConnecter {
 
 		// 创建statement类对象，用来执行SQL语句！！
 		try {
+			System.out.println("start load data "+tableName);
 			Statement loadDataStm = con.createStatement();
 			// 要执行的SQL语句
-			String sql = "load data local infile 'f:/didi/"
+			String sql = "load data local infile 'F:/June/didi/"
 					+ tableName
-					+ ".txt into table"
+					+ ".txt' into table "
 					+ tableName
-					+ "fields terminated by ',' (driverId,orderId,time,longitude,latitude)";
+					+ " fields terminated by ',' (driverId,orderId,time,longitude,latitude)";
 			loadDataStm.executeUpdate(sql);
+			con.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
+		} finally{
+			System.out.println("success load data "+tableName);
 		}
 
 		return 1;
@@ -430,11 +441,15 @@ public class MysqlConnecter {
 			Statement truncateStm = con.createStatement();
 			// 要执行的SQL语句
 			String sql = "truncate " + tableName;
+			System.out.println("start truncate "+tableName);
 			truncateStm.executeUpdate(sql);
+			con.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
+		}finally{
+			System.out.println("success truncate "+tableName);
 		}
 
 		return 1;
@@ -483,7 +498,7 @@ public class MysqlConnecter {
 	 * 查找area_ave数据，返回二维数组
 	 * @return
 	 */
-	public double[][] searchAreaAve() {
+	public double[][] searchAreaAve(String aveTable) {
 		double[][] result = new double[30][218];
 		for (int i = 0; i < 7; i++)
 			result[i][217] = 0;
